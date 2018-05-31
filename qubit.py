@@ -53,7 +53,7 @@ def construct_hamiltonian(basis, k = 1, a = 1):
             except NoPair:
                 pass
 
-    return hamiltonian
+    return hamiltonian.tocsr()
 
 
 def norm(psi):
