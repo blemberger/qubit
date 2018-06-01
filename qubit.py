@@ -18,6 +18,10 @@ def get_basis(n_qubits):
     return basis, reverse_basis
 
 
+def flip_bit(basis_element, bit):
+    return tuple(b if index != bit else int(not b) for index, b in enumerate(basis_element))
+
+
 class NoPair(Exception):
     pass
 
@@ -76,48 +80,56 @@ if __name__ == "__main__":
 
     basis, reverse_basis = get_basis(5)
 
-    # print('Basis:')
-    # for q, state in basis.items():
-    #     print(f'{q:>2} -> {state}')
+    print(basis[0])
+    fb = flip_bit(basis[0], 3)
+    print(fb)
+
+    print(reverse_basis[fb])
+    print(basis[2])
+
     #
-    # print('\nReverse Basis:')
-    # for state, q in reverse_basis.items():
-    #     print(f'{state} -> {q:>2}')
-
-    psi = get_random_initial_state(basis)
-    # print(psi)
-    # print(psi.shape)
-
-    # try:
-    #     print(find_pair(0, 1, basis))
-    # except NoPair:
-    #     print('yeah, no pair')
-    # print(find_pair(1, 4, basis))
-
-    ham = construct_hamiltonian(basis)
-    # print(ham.toarray())
-
-    times = np.linspace(0, 4, 50000)
-    dt = np.abs(times[1] - times[0])
-    states_over_time = [psi]
-
-    for t in tqdm(times[1:]):
-        psi = time_step__forward_euler(ham, psi, dt)
-        states_over_time.append(psi)
-
-    # for p in states_over_time:
-    #     print(p)
-
-    probabilities_over_time = [np.abs(state) ** 2 for state in states_over_time]
-    # for n in probabilities_over_time:
-    #     print(n)
-
-    print(probabilities_over_time[-1])
-
-    y_arrays = [[state[q] for state in probabilities_over_time] for q in basis]
-    norm_vs_time = [sum(y) for y in probabilities_over_time]
-    for q, y in enumerate(y_arrays):
-        plt.plot(y, label = f'q = {q}')
-    plt.plot(norm_vs_time, label = 'norm', color = 'black')
-
-    plt.show()
+    # # print('Basis:')
+    # # for q, state in basis.items():
+    # #     print(f'{q:>2} -> {state}')
+    # #
+    # # print('\nReverse Basis:')
+    # # for state, q in reverse_basis.items():
+    # #     print(f'{state} -> {q:>2}')
+    #
+    # psi = get_random_initial_state(basis)
+    # # print(psi)
+    # # print(psi.shape)
+    #
+    # # try:
+    # #     print(find_pair(0, 1, basis))
+    # # except NoPair:
+    # #     print('yeah, no pair')
+    # # print(find_pair(1, 4, basis))
+    #
+    # ham = construct_hamiltonian(basis)
+    # # print(ham.toarray())
+    #
+    # times = np.linspace(0, 4, 50000)
+    # dt = np.abs(times[1] - times[0])
+    # states_over_time = [psi]
+    #
+    # for t in tqdm(times[1:]):
+    #     psi = time_step__forward_euler(ham, psi, dt)
+    #     states_over_time.append(psi)
+    #
+    # # for p in states_over_time:
+    # #     print(p)
+    #
+    # probabilities_over_time = [np.abs(state) ** 2 for state in states_over_time]
+    # # for n in probabilities_over_time:
+    # #     print(n)
+    #
+    # print(probabilities_over_time[-1])
+    #
+    # y_arrays = [[state[q] for state in probabilities_over_time] for q in basis]
+    # norm_vs_time = [sum(y) for y in probabilities_over_time]
+    # for q, y in enumerate(y_arrays):
+    #     plt.plot(y, label = f'q = {q}')
+    # plt.plot(norm_vs_time, label = 'norm', color = 'black')
+    #
+    # plt.show()
